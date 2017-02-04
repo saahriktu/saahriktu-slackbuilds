@@ -1,0 +1,12 @@
+    |-----handy-ruler------------------------------------------------------|
+kawa: Kawa is a general-purpose programming language that runs on the Java
+kawa: platform.
+kawa: 
+kawa: It is an extension of the long-established Scheme language, which is
+kawa: in the Lisp family of programming languages. Kawa has many useful
+kawa: features.
+kawa: Kawa is also a useful framework for implementing other programming
+kawa: languages on the Java platform. It has many useful utility classes. 
+kawa:
+kawa: https://www.gnu.org/software/kawa/
+kawa:

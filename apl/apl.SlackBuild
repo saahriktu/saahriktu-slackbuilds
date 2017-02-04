@@ -1,0 +1,32 @@
+#!/bin/bash
+# 2016 (c) Artem Kurashov <mail@saahriktu.org> under GNU GPLv3
+
+#control variables
+PKGNAM=apl
+VERSION=${VERSION:-$(echo $PKGNAM_*.tar.?z* | cut -f 2 -d - | cut -f 1-2 -d .)}
+CLNVER=$(echo "$VERSION" | sed 's/[a-z]//')
+ARCH=$(arch)
+BUILD=${BUILD:-1}
+
+#building
+tar xvf $PKGNAM-*.tar.?z*
+cd $PKGNAM-$CLNVER
+if [ "$ARCH" == "x86_64" ]; then
+	./configure --prefix=/usr --libdir=/usr/lib64
+else
+	./configure --prefix=/usr
+fi
+sed -i 's/CXXFLAGS = -g -O2/& -std=c++11/' Makefile
+sed -i 's/CXXFLAGS = -g -O2/& -std=c++11/' src/Makefile
+make
+
+#packaging
+mkdir -p data/install
+CWD=$(pwd) ; DESTDIR="$CWD/data" make install
+cp ../slack-desc data/install
+cd data
+makepkg -l y -c y ../../$PKGNAM-$VERSION-$ARCH-$BUILD.txz
+
+#cleaning
+cd ../..
+rm -r $PKGNAM-$CLNVER

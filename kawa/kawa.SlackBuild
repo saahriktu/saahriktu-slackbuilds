@@ -1,0 +1,25 @@
+#!/bin/bash
+# 2016 (c) Artem Kurashov <mail@saahriktu.org> under GNU GPLv3
+
+#control variables
+PKGNAM=kawa
+VERSION=${VERSION:-$(echo $PKGNAM_*.tar.?z* | cut -f 2 -d - | cut -f 1-2 -d .)}
+ARCH=noarch
+BUILD=${BUILD:-1}
+
+#building
+tar xvf $PKGNAM-*.tar.?z*
+cd $PKGNAM-$VERSION
+./configure --prefix=/usr
+make
+
+#packaging
+mkdir -p data/install
+DESTDIR="data" make install
+cp ../slack-desc data/install
+cd data
+makepkg -l y -c y ../../$PKGNAM-$VERSION-$ARCH-$BUILD.txz
+
+#cleaning
+cd ../..
+rm -r $PKGNAM-$VERSION
