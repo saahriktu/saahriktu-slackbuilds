@@ -1,0 +1,25 @@
+#!/bin/bash
+# 2017 (c) Artem Kurashov <mail@saahriktu.org> under GNU GPLv3
+
+#control variables
+PKGNAM=kaitai-struct-compiler
+VERSION=${VERSION:-$(echo $PKGNAM-*.zip | cut -f 4 -d - | cut -f 1-2 -d .)}
+ARCH=noarch
+BUILD=${BUILD:-1}
+
+#extract archive
+unzip $PKGNAM-*.zip
+cd $PKGNAM-$VERSION
+
+#packaging
+mkdir -p install usr/lib/$PKGNAM-$VERSION
+cp ../slack-desc install
+rm bin/kaitai-struct-compiler.bat
+mv bin lib usr/lib/$PKGNAM-$VERSION
+echo "( cd usr/bin ; rm -rf $PKGNAM )" >> install/doinst.sh
+echo "( cd usr/bin ; ln -sf /usr/lib/$PKGNAM-$VERSION/bin/$PKGNAM $PKGNAM )" >> install/doinst.sh
+makepkg -l y -c y ../$PKGNAM-$VERSION-$ARCH-$BUILD.txz
+
+#cleaning
+cd ..
+rm -r $PKGNAM-$VERSION

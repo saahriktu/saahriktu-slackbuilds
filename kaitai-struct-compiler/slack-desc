@@ -1,0 +1,14 @@
+                      |-----handy-ruler------------------------------------------------------|
+kaitai-struct-compiler: Kaitai Struct, declarative markup language to describe various binary
+kaitai-struct-compiler: data structures — binary file formats, network stream packets, etc.
+kaitai-struct-compiler:
+kaitai-struct-compiler: The basic idea of Kaitai Struct is that a particular format can be
+kaitai-struct-compiler: described using Kaitai Struct language (in a .ksy file), which then
+kaitai-struct-compiler: can be compiled using ksc into source files in one of the supported
+kaitai-struct-compiler: programming languages. These modules will include a generated code
+kaitai-struct-compiler: for a parser that can read described data structure from a
+kaitai-struct-compiler: file / stream and provide access to its contents in a nice,
+kaitai-struct-compiler: easy-to-comprehend API. 
+kaitai-struct-compiler:
+kaitai-struct-compiler: http://kaitai.io/
+kaitai-struct-compiler:
