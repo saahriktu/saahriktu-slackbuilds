@@ -1,0 +1,28 @@
+#!/bin/bash
+# 2017 (c) Artem Kurashov <mail@saahriktu.org> under GNU GPLv3
+
+#control variables
+PKGNAM=emkatic
+VERSION=${VERSION:-$(echo $PKGNAM-*.tar.gz | cut -d - -f 2)}
+ARCH=${ARCH:-$(uname -m)}
+BUILD=${BUILD:-1}
+
+#extract archive
+tar xvf $PKGNAM-*.tar.gz
+cd $PKGNAM-$VERSION-src
+
+#building
+lazbuild --lazarusdir=/usr/share/lazarus ${PKGNAM}.lpi
+
+#packaging
+mkdir -p data/usr/bin
+cp emkatic data/usr/bin/
+strip -s data/usr/bin/emkatic
+mkdir data/install
+cp ../slack-desc data/install
+cd data
+makepkg -c y ../../$PKGNAM-$VERSION-$ARCH-$BUILD.txz
+
+#cleaning
+cd ../..
+rm -r $PKGNAM-$VERSION-src

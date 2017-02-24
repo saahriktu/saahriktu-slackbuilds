@@ -1,0 +1,32 @@
+#!/bin/bash
+# 2016 (c) Artem Kurashov <mail@saahriktu.org> under GNU GPLv3
+
+#control variables
+PKGNAM=pidgin-latex
+VERSION=${VERSION:-$(echo $PKGNAM_*.tar.?z* | cut -f 2 -d _ | cut -f 1-3 -d .)}
+ARCH=$(uname -m)
+BUILD=${BUILD:-1}
+
+if [ "$ARCH" = "x86_64" ]; then
+  LIBDIRSUFFIX="64"
+else
+  LIBDIRSUFFIX=""
+fi
+
+#building
+tar xvf $PKGNAM_*.tar.?z*
+cd $PKGNAM
+make
+
+#packaging
+mkdir -p data/usr/lib${LIBDIRSUFFIX}/pidgin/
+cp LaTeX.so data/usr/lib${LIBDIRSUFFIX}/pidgin/
+strip -s data/usr/lib${LIBDIRSUFFIX}/pidgin/LaTeX.so
+mkdir data/install
+cp ../slack-desc  data/install
+cd data
+makepkg -c y ../../$PKGNAM-$VERSION-$ARCH-$BUILD.txz
+
+#cleaning
+cd ../..
+rm -r $PKGNAM

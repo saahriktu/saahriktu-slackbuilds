@@ -1,0 +1,35 @@
+#!/bin/bash
+# 2016 (c) Artem Kurashov <mail@saahriktu.org> under GNU GPLv3
+
+#control variables
+PKGNAM=hd-idle
+VERSION=${VERSION:-$(echo $PKGNAM-*.t?z* | cut -d - -f 3 | cut -d . -f 1-2)}
+ARCH=$(uname -m)
+BUILD=${BUILD:-1}
+
+if [ "$ARCH" = "x86_64" ]; then
+  LIBDIRSUFFIX="64"
+else
+  LIBDIRSUFFIX=""
+fi
+
+#building
+tar xvf $PKGNAM-*.t?z*
+cd $PKGNAM
+make
+
+#packaging
+mkdir -p data/usr/bin
+mkdir -p data/usr/share/man/man1
+cp hd-idle data/usr/bin
+strip -s data/usr/bin/hd-idle
+chmod 755 data/usr/bin/hd-idle
+cp hd-idle.1 data/usr/share/man/man1
+mkdir data/install
+cp ../slack-desc  data/install
+cd data
+makepkg -c y ../../$PKGNAM-$VERSION-$ARCH-$BUILD.txz
+
+#cleaning
+cd ../..
+rm -r $PKGNAM

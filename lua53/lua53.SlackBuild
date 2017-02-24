@@ -1,0 +1,35 @@
+#!/bin/bash
+# 2016 (c) Artem Kurashov <mail@saahriktu.org> under GNU GPLv3
+
+#control variables
+PKGNAM=lua53
+VERSION=${VERSION:-$(echo lua-*.tar.?z* | cut -f 2 -d - | cut -f 1-3 -d .)}
+ARCH=$(uname -m)
+BUILD=${BUILD:-1}
+
+#building
+tar xvf lua-*.tar.?z*
+cd lua-$VERSION
+sed -i 's/\/local//' Makefile
+sed -i 's/\/usr/data&/' Makefile
+sed -i 's/cd doc \&\& \$(INSTALL_DATA) \$(TO_MAN) \$(INSTALL_MAN)/cd doc \&\& \$(INSTALL_DATA) \$(TO_MAN) ..\/src\/\$(INSTALL_MAN)/' Makefile
+sed -i 's/-lreadline/& -ltermcap/g' src/Makefile
+
+if [ "$ARCH" = "x86_64" ]; then
+	sed -i 's/\/lib/&64/g' Makefile
+fi
+
+make linux
+
+#packaging
+make install
+strip -s src/data/usr/bin/*
+gzip -9 src/data/usr/man/man1/*
+mkdir -p src/data/install
+cp ../slack-desc  src/data/install
+cd src/data
+makepkg -c y ../../../$PKGNAM-$VERSION-$ARCH-$BUILD.txz
+
+#cleaning
+cd ../../..
+rm -r lua-$VERSION
