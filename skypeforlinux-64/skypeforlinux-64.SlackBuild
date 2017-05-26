@@ -1,0 +1,18 @@
+#!/bin/bash
+# 2017 (c) saahriktu
+
+# unpack .deb archive
+ar x skypeforlinux-64.deb
+mkdir data
+cd data
+tar xvf ../data.tar.xz
+
+# make package
+mkdir install
+rm opt/ -R
+cp ../slack-desc install/
+makepkg -c y ../skypeforlinux-64-9999-x86_64-1.txz
+
+# clean
+cd ..
+rm -r data control.tar.gz data.tar.xz debian-binary _gpgbuilder
