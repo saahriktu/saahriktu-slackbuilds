@@ -1,0 +1,8 @@
+       |-----handy-ruler------------------------------------------------------|
+plibsys: Highly portable C system library: threads and synchronization
+plibsys: primitives, sockets (TCP, UDP, SCTP), IPv4 and IPv6, IPC, hash
+plibsys: functions (MD5, SHA-1, SHA-2, SHA-3, GOST), binary trees (RB, AVL) and
+plibsys: more. Native code performance. 
+plibsys:
+plibsys: https://github.com/saprykin/plibsys
+plibsys:

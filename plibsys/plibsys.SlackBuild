@@ -1,0 +1,31 @@
+#!/bin/bash
+# 2017 (c) Artem Kurashov <mail@saahriktu.org> under GNU GPLv3
+
+#control variables
+PKGNAM=plibsys
+VERSION=${VERSION:-$(ls $PKGNAM-*.tar.?z* | cut -d - -f 2 | cut -d . -f 1-3)}
+ARCH=${ARCH:-$(uname -m)}
+BUILD=${BUILD:-1}
+
+#extract archive
+tar xvf ${PKGNAM}-*.tar.?z*
+cd ${PKGNAM}-${VERSION}
+
+#building
+cmake -DCMAKE_INSTALL_PREFIX=/usr .
+make
+
+#packaging
+mkdir -p data/install
+DESTDIR="data" make install
+strip -s data/usr/lib/*
+if [ "$ARCH" = "x86_64" ]; then
+	mv data/usr/lib data/usr/lib64
+fi
+cp ../slack-desc data/install
+cd data
+makepkg -l y -c y ../../$PKGNAM-$VERSION-$ARCH-$BUILD.txz
+
+#cleaning
+cd ../..
+rm -r ${PKGNAM}-${VERSION}
