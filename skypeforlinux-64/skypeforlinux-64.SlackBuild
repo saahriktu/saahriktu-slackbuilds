@@ -1,8 +1,10 @@
 #!/bin/bash
 # 2017 (c) saahriktu
 
+VERSION=$(ls skypeforlinux_*.deb | cut -d _ -f 2)
+
 # unpack .deb archive
-ar x skypeforlinux-64.deb
+ar x skypeforlinux_*.deb
 mkdir data
 cd data
 tar xvf ../data.tar.xz
@@ -11,7 +13,7 @@ tar xvf ../data.tar.xz
 mkdir install
 rm opt/ -R
 cp ../slack-desc install/
-makepkg -c y ../skypeforlinux-64-9999-x86_64-1.txz
+makepkg -c y ../skypeforlinux-64-${VERSION}-x86_64-1.txz
 
 # clean
 cd ..
