@@ -1,0 +1,35 @@
+#!/bin/bash
+# 2017 (c) Artem Kurashov <mail@saahriktu.org> under GNU GPLv3
+
+#control variables
+PKGNAM=apulse
+VERSION=${VERSION:-$(echo $PKGNAM-*.tar.* | cut -d - -f 2 | sed 's/\.tar.*$//')}
+ARCH=${ARCH:-$(uname -m)}
+BUILD=${BUILD:-1}
+
+if [ "$ARCH" == "x86_64" ]; then
+	LIBDIR="lib64"
+else
+	LIBDIR="lib"
+fi
+
+#extract archive
+tar xvf $PKGNAM-*.tar.*
+cd $PKGNAM-$VERSION
+
+#building
+cmake -DCMAKE_INSTALL_PREFIX=/usr .
+make
+
+#packaging
+strip -s libpulse.so.0 libpulse-simple.so.0 libpulsecommon-5.0.so
+mkdir -p data/usr/$LIBDIR
+cp libpulse-simple.so libpulse-simple.so.0 libpulse.so libpulse.so.0 libpulsecommon-5.0.so data/usr/$LIBDIR/
+mkdir data/install
+cp ../slack-desc data/install/
+cd data
+makepkg -c y -l y ../../$PKGNAM-$VERSION-$ARCH-$BUILD.txz
+
+#cleaning
+cd ../..
+rm -r $PKGNAM-$VERSION
