@@ -1,10 +1,9 @@
 #!/bin/bash
 # 2017 (c) saahriktu
 
-VERSION=$(ls skypeforlinux_*.deb | cut -d _ -f 2)
-
 # unpack .deb archive
-ar x skypeforlinux_*.deb
+ar x skypeforlinux*.deb
+VERSION=$(tar Oxvf control.tar.gz ./control | grep ^Version: | sed 's/^Version:\ //')
 mkdir data
 cd data
 tar xvf ../data.tar.xz
