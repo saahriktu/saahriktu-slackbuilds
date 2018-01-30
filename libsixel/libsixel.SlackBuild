@@ -1,0 +1,36 @@
+#!/bin/bash
+# 2018 (c) Artem Kurashov <mail@saahriktu.org> under GNU GPLv3
+
+#control variables
+PKGNAM=libsixel
+VERSION=${VERSION:-1.7.3}
+ARCH=${ARCH:-$(uname -m)}
+BUILD=${BUILD:-2}
+
+if [ "$ARCH" = "x86_64" ]; then
+	LIBDIRSUFFIX="64"
+else
+	LIBDIRSUFFIX=""
+fi
+
+#extract archive
+tar xvf saitoha-libsixel-v1.7.3-2-g57c2c88.tar.gz
+cd saitoha-libsixel-57c2c88
+
+#building
+./configure --prefix=/usr --libdir=/usr/lib${LIBDIRSUFFIX}
+make
+
+#packaging
+mkdir -p data/install
+mkdir -p data/usr/lib${LIBDIRSUFFIX} data/usr/bin
+DESTDIR=$(realpath data) make install
+strip -s data/usr/lib${LIBDIRSUFFIX}/*
+strip -s data/usr/bin/*
+cp ../slack-desc data/install
+cd data
+makepkg -l y -c y ../../$PKGNAM-$VERSION-$ARCH-$BUILD.txz
+
+#cleaning
+cd ../..
+rm -r saitoha-libsixel-57c2c88
