@@ -1,0 +1,24 @@
+#!/bin/sh
+
+# Slackware build script for icq
+
+PRGNAM=icq
+VERSION=${VERSION:-unknown}
+BUILD=${BUILD:-1}
+TAG=${TAG:-saahriktu}
+
+if [ -z "$ARCH" ]; then
+  case "$( uname -m )" in
+    i?86) ARCH=i586 ;;
+       *) ARCH=$( uname -m ) ;;
+  esac
+fi
+
+mkdir -p data/{install,opt/icq}
+tar xvf icq.tar.xz
+mv icq data/opt/icq/
+cp slack-desc data/install
+cd data
+makepkg -c y ../$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.txz
+cd ..
+rm -r data
