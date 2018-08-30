@@ -1,0 +1,28 @@
+#!/bin/bash
+# 2018 (c) Artem Kurashov <mail@saahriktu.org> under GNU GPLv3
+
+#control variables
+PKGNAM=brtlsqrrl
+VERSION=${VERSION:-$(ls brtlsqrrl-*.tar.?z* | cut -d - -f 2 | sed 's/\.tar.*$//')}
+ARCH=${ARCH:-$(uname -m)}
+BUILD=${BUILD:-1}
+
+#extract archive
+tar xvf brtlsqrrl-*.tar.?z*
+cd brtlsqrrl-${VERSION}
+
+#building
+make
+
+#packaging
+mkdir -p data/usr/bin
+cp brtlsqrrl data/usr/bin
+strip -s data/usr/bin/brtlsqrrl
+mkdir data/install
+cp ../slack-desc data/install
+cd data
+makepkg -c y ../../$PKGNAM-$VERSION-$ARCH-$BUILD.txz
+
+#cleaning
+cd ../..
+rm -r brtlsqrrl-${VERSION}
